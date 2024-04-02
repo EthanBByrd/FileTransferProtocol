@@ -15,11 +15,11 @@ def main():
     client.connect(ADDR)
 
     """ Opening and reading the file data. """
-    file = open("data/yt.txt", "r")
+    file = open("project.txt", "r")
     data = file.read()
 
     """ Sending the filename to the server. """
-    client.send("yt.txt".encode(FORMAT))
+    client.send("project.txt".encode(FORMAT))
     msg = client.recv(SIZE).decode(FORMAT)
     print(f"[SERVER]: {msg}")
 
