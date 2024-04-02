@@ -15,9 +15,9 @@ This script is designed to operate as a client in a client-server model, using T
 3. **The `main` Function**: This function encapsulates the client's workflow.
    - **Starting a TCP Socket**: It creates a new socket object with `AF_INET` (IPv4) and `SOCK_STREAM` (TCP) as parameters, establishing a TCP connection.
    - **Connecting to the Server**: The client attempts to connect to the server using the address specified by `ADDR`.
-   - **File Handling**: It opens a file named `yt.txt` for reading, presumably to send its contents to the server.
-   - **Communicating File Name**: Sends the name of the file (`"yt.txt"`) to the server, then waits for and prints a response from the server.
-   - **Sending File Data**: Reads the contents of `yt.txt`, sends this data to the server, awaits a response, and prints it.
+   - **File Handling**: It opens a file named `project.txt` for reading, presumably to send its contents to the server.
+   - **Communicating File Name**: Sends the name of the file (`"project.txt"`) to the server, then waits for and prints a response from the server.
+   - **Sending File Data**: Reads the contents of `project.txt`, sends this data to the server, awaits a response, and prints it.
    - **Resource Cleanup**: Closes the file and the connection to the server.
 
 # Server File
