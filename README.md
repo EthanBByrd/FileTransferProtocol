@@ -19,3 +19,28 @@ This script is designed to operate as a client in a client-server model, using T
    - **Communicating File Name**: Sends the name of the file (`"yt.txt"`) to the server, then waits for and prints a response from the server.
    - **Sending File Data**: Reads the contents of `yt.txt`, sends this data to the server, awaits a response, and prints it.
    - **Resource Cleanup**: Closes the file and the connection to the server.
+
+# Server File
+This script sets up a server that listens for incoming TCP connections from clients. It is designed to receive a file name and file data from a client, save it, and then close the connection. Here's a detailed breakdown of its operation:
+
+1. **Importing Required Module**: The script begins by importing the `socket` module, essential for network communication.
+
+2. **Setting Up Connection Parameters**:
+   - `IP`: Retrieves the host machine's IP address using `socket.gethostbyname(socket.gethostname())`, aiming for operations within a local network.
+   - `PORT`: Specifies the port number (`4455`) on which the server listens for incoming connections.
+   - `ADDR`: Combines `IP` and `PORT` into a tuple to define the server's address.
+   - `SIZE`: Sets the buffer size to `1024` bytes for receiving data.
+   - `FORMAT`: Defines `"utf-8"` as the encoding format for data transmission.
+
+3. **The `main` Function**: Outlines the server's workflow.
+   - **Server Initialization**: Displays a starting message and initializes a TCP socket with `AF_INET` (IPv4) and `SOCK_STREAM` (TCP) parameters.
+   - **Binding to the Server**: Binds the IP address and port number to the server socket.
+   - **Listening for Connections**: The server starts listening for client connections, indicating it's ready to accept connections.
+   - **Handling Client Connections**: Uses a loop to continuously accept new connections. For each connection:
+     - Accepts a connection from a client and prints the address of the connected client.
+     - Receives the name of a file from the client, creates/opens the file in write mode, and sends a confirmation back to the client.
+     - Receives file data from the client, writes it to the file, sends a confirmation that the data was received, and then closes the file.
+     - Closes the connection with the client and prints a message indicating the client has been disconnected.
+
+The server remains in the listening state, ready to accept new connections until the script is manually terminated.
+
