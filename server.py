@@ -1,4 +1,5 @@
 import socket
+import time
 
 IP = socket.gethostbyname(socket.gethostname())
 PORT = 4455
@@ -24,10 +25,13 @@ def main():
         conn, addr = server.accept()
         print(f"[NEW CONNECTION] {addr} connected.")
 
+        """ Start timing the file reception """
+        start_time = time.time()
+
         """ Receiving the filename from the client. """
         filename = conn.recv(SIZE).decode(FORMAT)
         print(f"[RECV] Receiving the filename.")
-        file = open(filename, "w")
+        file = open("server_data/" + filename, "w")
         conn.send("Filename received.".encode(FORMAT))
 
         """ Receiving the file data from the client. """
@@ -38,6 +42,11 @@ def main():
 
         """ Closing the file. """
         file.close()
+
+        """ End timing of the File Reception """
+        end_time = time.time()
+        duration = end_time - start_time
+        print(f"File received and saved in {duration} seconds.")
 
         """ Closing the connection from the client. """
         conn.close()
