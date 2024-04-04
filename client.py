@@ -1,4 +1,5 @@
 import socket
+import time
 
 IP = socket.gethostbyname(socket.gethostname())
 PORT = 4455
@@ -18,6 +19,9 @@ def main():
     file = open("project.txt", "r")
     data = file.read()
 
+    """ Start timing the file transfer """
+    start_time = time.time()
+
     """ Sending the filename to the server. """
     client.send("project.txt".encode(FORMAT))
     msg = client.recv(SIZE).decode(FORMAT)
@@ -27,6 +31,11 @@ def main():
     client.send(data.encode(FORMAT))
     msg = client.recv(SIZE).decode(FORMAT)
     print(f"[SERVER]: {msg}")
+
+    """ End timing the file transfer """
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"File transfer completed in {duration} seconds.")
 
     """ Closing the file. """
     file.close()
