@@ -28,6 +28,19 @@ def main():
         """ Start timing the file reception """
         start_time = time.time()
 
+        import os
+
+        """ Receiving the filename """
+        filename = conn.recv(SIZE).decode(FORMAT)
+
+        """ Handle invalid filename case """
+        filename = os.path.basename(filename)
+        if not filename:
+            """ Handle invalid filename case """
+            conn.send("Invalid filename".encode(FORMAT))
+            conn.close()
+            continue
+
         """ Receiving the filename from the client. """
         filename = conn.recv(SIZE).decode(FORMAT)
         print(f"[RECV] Receiving the filename.")
