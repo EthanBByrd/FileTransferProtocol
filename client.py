@@ -1,4 +1,5 @@
 import socket
+import ssl
 import time
 
 IP = socket.gethostbyname(socket.gethostname())
@@ -9,39 +10,33 @@ SIZE = 1024
 
 
 def main():
-    """ Staring a TCP socket. """
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # Create a default SSL context
+    context = ssl.create_default_context()
 
-    """ Connecting to the server. """
-    client.connect(ADDR)
+    # WARNING: This is insecure and should only be used for testing purposes
+    context.check_hostname = False
+    context.verify_mode = ssl.CERT_NONE
 
-    """ Opening and reading the file data. """
-    file = open("project.txt", "r")
-    data = file.read()
+    with socket.create_connection(ADDR) as sock:
+        with context.wrap_socket(sock, server_hostname=IP) as ssock:
+            print("[CONNECTED] Client connected to server securely.")
 
-    """ Start timing the file transfer """
-    start_time = time.time()
+            file_path = "project.txt"  # Update this to the correct file path
+            with open(file_path, "r") as file:
+                data = file.read()
 
-    """ Sending the filename to the server. """
-    client.send("project.txt".encode(FORMAT))
-    msg = client.recv(SIZE).decode(FORMAT)
-    print(f"[SERVER]: {msg}")
+                start_time = time.time()
 
-    """ Sending the file data to the server. """
-    client.send(data.encode(FORMAT))
-    msg = client.recv(SIZE).decode(FORMAT)
-    print(f"[SERVER]: {msg}")
+                # Sending the filename
+                ssock.send("project.txt".encode(FORMAT))
+                print(ssock.recv(SIZE).decode(FORMAT))
 
-    """ End timing the file transfer """
-    end_time = time.time()
-    duration = end_time - start_time
-    print(f"File transfer completed in {duration} seconds.")
+                # Sending the file data
+                ssock.send(data.encode(FORMAT))
+                print(ssock.recv(SIZE).decode(FORMAT))
 
-    """ Closing the file. """
-    file.close()
-
-    """ Closing the connection from the server. """
-    client.close()
+                end_time = time.time()
+                print(f"File transfer completed in {end_time - start_time} seconds.")
 
 
 if __name__ == "__main__":
