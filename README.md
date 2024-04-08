@@ -1,46 +1,44 @@
 # FileTransferProtocol
 
-# Client File
-This script is designed to operate as a client in a client-server model, using TCP (Transmission Control Protocol) for network communication. Here's a breakdown of its components and how it functions:
+## Overview
+This project demonstrates the implementation of a secure file transfer system using Python's `socket` and `ssl` libraries, showcasing encrypted data transmission between a client and a server over a network.
 
-1. **Importing Required Module**: It starts by importing the `socket` module, which is necessary for any network communication.
+## Client File
 
-2. **Setting Up Connection Parameters**:
-   - `IP`: It obtains the host machine's IP address by using `socket.gethostbyname(socket.gethostname())`. This is intended to work on a local network where the client and server are on the same network segment.
-   - `PORT`: Sets the port number to `4455`, which is the port on which the server is expected to listen for incoming connections.
-   - `ADDR`: A tuple combining `IP` and `PORT` to specify the address of the server.
-   - `FORMAT`: A string denoting the encoding format (`"utf-8"`) to be used for sending and receiving data.
-   - `SIZE`: Specifies the size (in bytes) of the buffer to be used when receiving data from the server, set to `1024`.
+The client script is responsible for initiating a secure connection to the server and transmitting a specified file's contents. Here's a detailed breakdown of its functionality:
 
-3. **The `main` Function**: This function encapsulates the client's workflow.
-   - **Starting a TCP Socket**: It creates a new socket object with `AF_INET` (IPv4) and `SOCK_STREAM` (TCP) as parameters, establishing a TCP connection.
-   - **Connecting to the Server**: The client attempts to connect to the server using the address specified by `ADDR`.
-   - **File Handling**: It opens a file named `project.txt` for reading, presumably to send its contents to the server.
-   - **Communicating File Name**: Sends the name of the file (`"project.txt"`) to the server, then waits for and prints a response from the server.
-   - **Sending File Data**: Reads the contents of `project.txt`, sends this data to the server, awaits a response, and prints it.
-   - **Resource Cleanup**: Closes the file and the connection to the server.
+- **Importing Required Modules**: Utilizes the `socket`, `ssl`, and `time` modules for network communication and encryption.
+- **Setting Up Connection Parameters**:
+  - **IP**: Determines the host machine's IP address to facilitate communication over a local network.
+  - **PORT**: Designates port number `4455`, which the server listens on for incoming connections.
+  - **ADDR**: A tuple that combines `IP` and `PORT` to specify the server's network address.
+  - **FORMAT**: Specifies `"utf-8"` encoding for data transmission.
+  - **SIZE**: Defines the buffer size for data reception, set to `1024` bytes.
+- **Main Functionality**:
+  - Initiates a TCP socket and establishes a secure connection to the server.
+  - Handles file operations for reading the contents of `project.txt` and transmits this data to the server.
+  - Manages communication to send the file name and data to the server and prints server responses.
 
-# Server File
-This script sets up a server that listens for incoming TCP connections from clients. It is designed to receive a file name and file data from a client, save it, and then close the connection. Here's a detailed breakdown of its operation:
+## Server File
 
-1. **Importing Required Module**: The script begins by importing the `socket` module, essential for network communication.
+The server script sets up a listening service that accepts encrypted file transmissions from clients, saving received files appropriately. Detailed operation includes:
 
-2. **Setting Up Connection Parameters**:
-   - `IP`: Retrieves the host machine's IP address using `socket.gethostbyname(socket.gethostname())`, aiming for operations within a local network.
-   - `PORT`: Specifies the port number (`4455`) on which the server listens for incoming connections.
-   - `ADDR`: Combines `IP` and `PORT` into a tuple to define the server's address.
-   - `SIZE`: Sets the buffer size to `1024` bytes for receiving data.
-   - `FORMAT`: Defines `"utf-8"` as the encoding format for data transmission.
+- **Importing Required Modules**: Incorporates `socket`, `ssl`, `time`, and `os` modules for networking, encryption, and file management.
+- **Setting Up Connection Parameters**:
+  - Similar to the client, with additions for SSL context setup using a certificate (`server.crt`) and a private key (`server.key`).
+- **Main Functionality**:
+  - Initializes a server socket that binds to the specified IP address and port, then listens for incoming connections.
+  - Accepts connections, securely wraps them using SSL, and processes received file name and data to save on the server.
+  - Provides feedback to the client and handles multiple client connections in a loop.
 
-3. **The `main` Function**: Outlines the server's workflow.
-   - **Server Initialization**: Displays a starting message and initializes a TCP socket with `AF_INET` (IPv4) and `SOCK_STREAM` (TCP) parameters.
-   - **Binding to the Server**: Binds the IP address and port number to the server socket.
-   - **Listening for Connections**: The server starts listening for client connections, indicating it's ready to accept connections.
-   - **Handling Client Connections**: Uses a loop to continuously accept new connections. For each connection:
-     - Accepts a connection from a client and prints the address of the connected client.
-     - Receives the name of a file from the client, creates/opens the file in write mode, and sends a confirmation back to the client.
-     - Receives file data from the client, writes it to the file, sends a confirmation that the data was received, and then closes the file.
-     - Closes the connection with the client and prints a message indicating the client has been disconnected.
+## Security Note
 
-The server remains in the listening state, ready to accept new connections until the script is manually terminated.
+The implementation, as designed, skips hostname verification and certificate validation for SSL connections, which is intended for demonstration and testing purposes only. For real-world applications, proper SSL certificate handling and verification mechanisms should be implemented.
+
+## Running the Project
+
+1. **Server Setup**: Start the server script first to ensure it's ready to accept connections:
+   ```bash
+   python Server.py
+
 
