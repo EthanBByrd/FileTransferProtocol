@@ -40,5 +40,8 @@ The implementation, as designed, skips hostname verification and certificate val
 1. **Server Setup**: Start the server script first to ensure it's ready to accept connections:
    ```bash
    python Server.py
+2. **Client Setup**: Start the client script :
+   ```bash
+   python client.py
 
 
